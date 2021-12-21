@@ -1,30 +1,17 @@
 {
-  description = "My haskell library";
-
-  nixConfig = {
-    substituters = [
-      "https://haskell-language-server.cachix.org"
-    ];
-    trusted-public-keys = [
-      "haskell-language-server.cachix.org-1:juFfHrwkOxqIOZShtC4YC1uT1bBcq2RSvC7OMKx0Nz8="
-    ];
-  };
+  description = "Servant libraries";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
+    nixpkgs.url = "github:nixos/nixpkgs/master";
     flake-utils.url = "github:numtide/flake-utils";
-
-    hls.url = "github:haskell/haskell-language-server";
-
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, hls, ... }:
-    flake-utils.lib.eachSystem ["x86_64-linux"] (system: let
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system: let
 
       compilerVersion = "8107";
 
@@ -39,19 +26,6 @@
         servant-machines     = self.callCabal2nix "servant-machines"     ./servant-machines     {};
         servant-client-core  = self.callCabal2nix "servant-client-core"  ./servant-client-core  {};
         servant-http-streams = self.callCabal2nix "servant-http-streams" ./servant-http-streams {};
-
-        # ip = unmarkBroken (dontCheck hold.ip);
-        # relude = hold.relude_1_0_0_1;
-        # co-log-polysemy = doJailbreak (hold.co-log-polysemy);
-        # netlink = (overrideSrc hold.netlink {
-        #   version = "1.1.2.0";
-        #   src = pkgs.fetchFromGitHub {
-        #     owner = "teto";
-        #     repo = "netlink-hs";
-        #     rev = "090a48ebdbc35171529c7db1bd420d227c19b76d";
-        #     sha256 = "sha256-qopa1ED4Bqk185b1AXZ32BG2s80SHDSkCODyoZfnft0=";
-        #   };
-        # });
       };
 
       pkgs = import nixpkgs {
@@ -63,9 +37,9 @@
 
       # modifier used in haskellPackages.developPackage
       myModifier = drv:
-        pkgs.haskell.lib.addBuildTools drv (with hsPkgs; [
+        pkgs.haskell.lib.addBuildTools drv (with hsPkgs;[
           cabal-install
-          hls.packages.${system}."haskell-language-server-${compilerVersion}"
+          haskell-language-server
         ]);
 
       mkPackage = name:
