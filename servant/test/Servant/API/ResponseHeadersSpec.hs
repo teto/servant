@@ -6,6 +6,7 @@ import           Test.Hspec
 
 import           Servant.API.Header
 import           Servant.API.ResponseHeaders
+import Servant.API.ContentTypes
 
 spec :: Spec
 spec = describe "Servant.API.ResponseHeaders" $ do
@@ -22,6 +23,10 @@ spec = describe "Servant.API.ResponseHeaders" $ do
     it "adds headers to the front of the list" $ do
       let val = addHeader 10 $ addHeader "b" 5 :: Headers '[Header "first" Int, Header "second" String] Int
       getHeaders val `shouldBe` [("first", "10"), ("second", "b")]
+
+    it "adds headers to the front of the list" $ do
+      let val = addHeader "b" NoContent :: Headers '[Header "first" String] NoContent
+      getHeaders val `shouldBe` [("first", "b")]
 
   describe "noHeader" $ do
 

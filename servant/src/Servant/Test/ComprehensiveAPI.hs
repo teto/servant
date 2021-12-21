@@ -66,6 +66,7 @@ type ComprehensiveAPIWithoutStreamingOrRaw' endpoint =
     :<|> "vault"            :> Vault :> GET
     :<|> "post-no-content"  :> PostNoContent
     :<|> "post-int"         :> Verb 'POST 204 '[JSON] Int
+    :<|> "delete-no-content"  :> DeleteNoContent
     :<|> "named-context"    :> WithNamedContext "foo" '[] GET
     :<|> "capture-all"      :> CaptureAll "foo" Int :> GET
     :<|> "summary"          :> Summary "foo" :> GET
