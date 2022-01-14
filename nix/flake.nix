@@ -60,7 +60,7 @@
 
       mkPackage = name:
           hsPkgs.developPackage {
-            root =  pkgs.lib.cleanSource (builtins.toPath ./. + "/${name}");
+            root =  pkgs.lib.cleanSource (builtins.toPath ../. + "/${name}");
             name = name;
             returnShellEnv = false;
             withHoogle = true;
@@ -71,7 +71,7 @@
     in {
       packages = {
 
-        mptcp-pm = mkPackage "mptcp-pm";
+        servant = mkPackage "servant";
 
         # mptcpanalyzer = hsPkgs.developPackage {
         #   root = pkgs.lib.cleanSource ./mptcpanalyzer;
@@ -85,10 +85,10 @@
         # };
       };
 
-      defaultPackage = self.packages.${system}.mptcpanalyzer;
+      defaultPackage = self.packages.${system}.servant;
 
       devShells = {
-        mptcp-pm = self.packages.${system}.mptcp-pm.envFunc {};
+        servant = self.packages.${system}.servant.envFunc {};
       };
   });
 }
