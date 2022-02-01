@@ -60,7 +60,17 @@
 
       defaultPackage = self.packages.${system}.servant;
 
+      devShell = self.devShells.${system}.basic;
       devShells = {
+        basic = let
+          ghc = pkgs.haskell.packages."ghc${compilerVersion}".ghcWithPackages (ps: [ ps.haskell-language-server ]);
+          docstuffs = pkgs.python3.withPackages (ps: with ps; [ recommonmark sphinx sphinx_rtd_theme ]);
+        in
+          pkgs.stdenv.mkDerivation {
+            name = "servant-dev";
+            buildInputs = with pkgs; [ ghc zlib python3 wget cabal-install postgresql openssl stack haskellPackages.hspec-discover ];
+          };
+
         servant = self.packages.${system}.servant;
       };
   });
